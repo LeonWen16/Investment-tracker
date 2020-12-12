@@ -17,7 +17,8 @@ Rails.application.routes.draw do
   
   # DELETE
   get("/delete_security/:path_id", { :controller => "securities", :action => "destroy" })
-
+  get("/added", { :controller => "securities", :action => "old" })
+  get("/low_fund", { :controller => "securities", :action => "more" })
   #------------------------------
 
   # Routes for the User account:

@@ -1,8 +1,8 @@
 class SecuritiesController < ApplicationController
   def index
-    matching_securities = Security.all
+    matching_securities = Security.where({ :owner_id => @current_user.id })
 
-    @list_of_securities = matching_securities.order({ :created_at => :desc })
+    @list_of_securities = matching_securities
 
     render({ :template => "securities/index.html.erb" })
   end
@@ -38,35 +38,35 @@ class SecuritiesController < ApplicationController
     if params[:buy_sell] == "buy" 
       # check if user has enough cash for this trade 
       if @current_user.cash < (price * number_of_shares + commission)
-        redirect_to("/portfolio", { :alert => "Insufficient funds"})
-      end 
-      
-      @current_user.cash -= price * number_of_shares + commission
-      # check if user already owns this security
-      # if they do, just update the instance of that ticker in the database 
-      x = Security.where({ :owner_id => @current_user.id })
-      if x.empty? == false  
-        y = x.where({ :ticker => this_ticker })
-        if y.empty? == false 
-          the_security = y.first 
+        redirect_to("/low_fund", { :alert => "Insufficient funds"}) 
+      else 
+        @current_user.cash -= price * number_of_shares + commission
+        @current_user.save
+        # check if user already owns this security
+        # if they do, just update the instance of that ticker in the database 
+        matching = Security.where({ :owner_id => @current_user.id }).where({ :ticker => this_ticker })
+        if matching.empty? == false  
+          the_security = matching.first 
           the_security.average_price = (the_security.average_price * the_security.number_of_shares + number_of_shares * price) / (the_security.number_of_shares + number_of_shares)  
           the_security.current_price = all_data.fetch("05. price")
           the_security.last_price = all_data.fetch("08. previous close")
           the_security.number_of_shares += number_of_shares
           the_security.save 
+          @current_user.update() 
           redirect_to("/portfolio", { :notice => "Added " + number_of_shares.to_s + " shares of " + this_ticker })
+        else  
+          # create a new security instance in the database 
+          the_security = Security.new
+          the_security.ticker = this_ticker.upcase 
+          the_security.average_price = price
+          the_security.number_of_shares = number_of_shares
+          the_security.last_price = all_data.fetch("08. previous close")
+          the_security.current_price = all_data.fetch("05. price")
+          the_security.owner_id = @current_user.id 
+          the_security.save 
+          @current_user.update() 
+          redirect_to("/portfolio", { :notice => "Bought " + number_of_shares.to_s + " shares of " + this_ticker })
         end 
-      else  
-        # create a new security instance in the database 
-        the_security = Security.new
-        the_security.ticker = this_ticker
-        the_security.average_price = price
-        the_security.number_of_shares = number_of_shares
-        the_security.last_price = all_data.fetch("08. previous close")
-        the_security.current_price = all_data.fetch("05. price")
-        the_security.owner_id = @current_user.id 
-        the_security.save 
-        redirect_to("/portfolio", { :notice => "Bought " + number_of_shares.to_s + " shares of " + this_ticker })
       end 
     else # sell case   
       # check if the user already owns this 
@@ -78,13 +78,16 @@ class SecuritiesController < ApplicationController
       else
         the_security = x.first 
         @current_user.cash +=  number_of_shares * price - commission 
+        @current_user.save
         owned_shares = the_security.number_of_shares
         if owned_shares = number_of_shares 
           the_security.destroy 
+          @current_user.update()
           redirect_to("/portfolio", { :notice => "Successfully sold " + number_of_shares.to_s + " shares of " + this_ticker.to_s + " at " + price.to_s} )
         else  
           the_security.quantity -= number_of_shares 
           the_security.save 
+          @current_user.update()
           redirect_to("/portfolio", { :notice => "Successfully sold " + number_of_shares.to_s + " shares of " + this_ticker.to_s + " at " + price.to_s} )
         end 
       end 
@@ -98,5 +101,13 @@ class SecuritiesController < ApplicationController
     the_security.destroy
 
     redirect_to("/securities", { :notice => "Security deleted successfully."} )
+  end
+
+  def old 
+    redirect_to("portfolios", { :notice => "Successfully added to position" })
+  end 
+
+  def more
+    redirect_to("portfolios", { :alert => "Insufficient funds" })
   end
 end

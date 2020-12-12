@@ -21,11 +21,15 @@
               </tr> 
               <tr> 
                 <th scope="row">Total Equity</th>
-                <td class="text-right"> <%= @current_user.cash %></td>
+                <td class="text-right"> <%= @current_user.current_value - @current_user.cash %></td>
               </tr> 
               <tr> 
-                <th scope="row">Gains/Losses</th>
-                <td class="text-right"></td>
+                <th scope="row">Gains/Losses ($)</th>
+                <td class="text-right"><%= @current_user.current_value - @current_user.base %></td>
+              </tr> 
+              <tr> 
+                <th scope="row">Gains/Losses (%)</th>
+                <td class="text-right"><%= (((@current_user.current_value - @current_user.base)/@current_user.base)*100).round(2).to_s + "%"%></td>
               </tr> 
             </tbody>
           </table>
@@ -112,49 +116,58 @@
 <hr> 
 <div> 
   <div> 
-    <table>
-      <tr> 
-        <th> 
-          Ticker
-        </th> 
-        <th> 
-          Quantity
-        </th> 
-        <th> 
-          Average Price
-        </th> 
-        <th> 
-          Current Price
-        </th> 
-        <th> 
-          Return ($)
-        </th> 
-        <th> 
-          Return (%)
-        </th> 
-      </tr> 
+    <table class="table table-bordered table_font">>
+      <thead> 
+        <tr> 
+          <th scope="col"> 
+            Ticker
+          </th> 
+
+          <th scope="col"> 
+            Quantity
+          </th> 
+
+          <th scope="col"> 
+            Average Price
+          </th> 
+
+          <th scope="col"> 
+            Current Price
+          </th> 
+
+          <th scope="col"> 
+            Return ($)
+          </th> 
+          
+          <th scope="col"> 
+            Return (%)
+          </th> 
+        </tr> 
+      </thead> 
 
       <% @list_of_securities.each do |a_security|%>
-      <tr> 
-        <td> 
-          <% a_security.ticker %>
-        <td> 
-        <td> 
-          <% a_security.number_of_shares %>
-        <td> 
-        <td> 
-          <% a_security.average_price %>
-        <td> 
-        <td> 
-          <% a_security.current_price %>
-        <td> 
-        <td> 
-          <% a_security.ticker %>
-        <td> 
-        <td> 
-          <% a_security.ticker %>
-        <td> 
-      </tr> 
+      <tbody> 
+        <tr>
+          <td> 
+            <%= a_security.ticker %>
+          <td> 
+          <td> 
+            <%= a_security.number_of_shares %>
+          <td> 
+          <td> 
+            <%= a_security.average_price.round(2) %>
+          <td> 
+          <td> 
+            <%= a_security.current_price.round(2) %>
+          <td> 
+          <td> 
+            <%= (a_security.current_price - a_security.average_price) * a_security.number_of_shares %>
+          <td> 
+          <td> 
+            <%= (((a_security.current_price - a_security.average_price)/(a_security.average_price)) * 100).to_s + "%" %>
+          <td> 
+        </tr> 
+      </tbody>
       <% end %>
     </table>
   </div>

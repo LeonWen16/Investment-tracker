@@ -19,7 +19,19 @@ class User < ApplicationRecord
   has_secure_password
   has_many(:securities, { :class_name => "Security", :foreign_key => "owner_id", :dependent => :destroy })
 
-#  def equity 
-#    return self.current_value - self.base 
-#  end 
+  def update 
+    owned = Security.where({ :owner_id => self.id })
+    num = owned.count
+    sum = self.cash  
+    for i in 0..(num-1) 
+      temp = owned.at(i) 
+      sum += temp.current_price * temp.number_of_shares
+    end 
+    self.current_value = sum 
+    self.save
+  end  
+
+  def equity 
+    return self.current_value - self.base 
+  end 
 end

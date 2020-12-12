@@ -19,7 +19,7 @@ class UserAuthenticationController < ApplicationController
       else
         session[:user_id] = user.id
       
-        redirect_to("/", { :notice => "Signed in successfully." })
+        redirect_to("/portfolio", { :notice => "Signed in successfully." })
       end
     else
       redirect_to("/user_sign_in", { :alert => "No user with that email address." })
@@ -94,12 +94,16 @@ class UserAuthenticationController < ApplicationController
         redirect_to("/portfolio", { :alert => "You do not have that much cash in this account" })
       else
         @current_user.cash -= amount 
+        @current_user.base -= amount 
         @current_user.save 
+        @current_user.update()
         redirect_to("/portfolio", { :notice => "Withdrew " + amount.to_s + " from this account" })
       end
     else 
       @current_user.cash += amount 
+      @current_user.base += amount 
       @current_user.save 
+      @current_user.update()
       redirect_to("/portfolio", { :notice => "Deposited " + amount.to_s + " to this account" })
     end 
   end 

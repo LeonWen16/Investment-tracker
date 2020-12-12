@@ -19,3 +19,8 @@ body{ padding-left: 20px; }
 .table_font{ font-size: 12px; }
 
 .grid_padding { padding-right: 100px; }
+
+.background-image {
+ background: url("https://images.pexels.com/photos/241544/pexels-photo-241544.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940") no-repeat center center;
+ background-size: cover;
+}
