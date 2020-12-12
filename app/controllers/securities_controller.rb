@@ -18,7 +18,7 @@ class SecuritiesController < ApplicationController
   end
 
   def execute
-    this_ticker = params.fetch("query_ticker")
+    this_ticker = params.fetch("query_ticker").upcase
     price = params.fetch("query_price").to_f 
     owner_id = @current_user.id
     number_of_shares = params.fetch("query_number_of_shares").to_i
@@ -44,12 +44,12 @@ class SecuritiesController < ApplicationController
         @current_user.save
         # check if user already owns this security
         # if they do, just update the instance of that ticker in the database 
-        matching = Security.where({ :owner_id => @current_user.id }).where({ :ticker => this_ticker })
+        matching = Security.where({ :owner_id => @current_user.id }).where({ :ticker => this_ticker.upcase })
         if matching.empty? == false  
           the_security = matching.first 
           the_security.average_price = (the_security.average_price * the_security.number_of_shares + number_of_shares * price) / (the_security.number_of_shares + number_of_shares)  
-          the_security.current_price = all_data.fetch("05. price")
-          the_security.last_price = all_data.fetch("08. previous close")
+          the_security.current_price = all_data.values[4]
+          the_security.last_price = all_data.values[7]
           the_security.number_of_shares += number_of_shares
           the_security.save 
           @current_user.update() 
@@ -60,8 +60,8 @@ class SecuritiesController < ApplicationController
           the_security.ticker = this_ticker.upcase 
           the_security.average_price = price
           the_security.number_of_shares = number_of_shares
-          the_security.last_price = all_data.fetch("08. previous close")
-          the_security.current_price = all_data.fetch("05. price")
+          the_security.last_price = all_data.values[7]
+          the_security.current_price = all_data.values[4]
           the_security.owner_id = @current_user.id 
           the_security.save 
           @current_user.update() 
