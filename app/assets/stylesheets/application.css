@@ -12,3 +12,10 @@
  *
  *= require_self
  */
+
+body{ padding-top: 70px; }
+body{ padding-left: 20px; }
+
+.table_font{ font-size: 12px; }
+
+.grid_padding { padding-right: 100px; }

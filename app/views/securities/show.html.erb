@@ -1,0 +1,161 @@
+<div>
+  <div>
+    <h1>
+      Security #<%= @the_security.id %> details
+    </h1>
+
+    <div>
+      <div>
+        <a href="/securities">
+          Go back
+        </a>
+      </div>
+
+      <div>
+        <a href="/delete_security/<%= @the_security.id %>">
+          Delete security
+        </a>
+      </div>
+    </div>
+
+    <dl>
+      <dt>
+        Company name
+      </dt>
+      <dd>
+        <%= @the_security.company_name %>
+      </dd>
+
+      <dt>
+        Ticker
+      </dt>
+      <dd>
+        <%= @the_security.ticker %>
+      </dd>
+
+      <dt>
+        Average price
+      </dt>
+      <dd>
+        <%= @the_security.average_price %>
+      </dd>
+
+      <dt>
+        Last price
+      </dt>
+      <dd>
+        <%= @the_security.last_price %>
+      </dd>
+
+      <dt>
+        Current price
+      </dt>
+      <dd>
+        <%= @the_security.current_price %>
+      </dd>
+
+      <dt>
+        Owner
+      </dt>
+      <dd>
+        <%= @the_security.owner_id %>
+      </dd>
+
+      <dt>
+        Number of shares
+      </dt>
+      <dd>
+        <%= @the_security.number_of_shares %>
+      </dd>
+
+      <dt>
+        Created at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_security.created_at) %> ago
+      </dd>
+
+      <dt>
+        Updated at
+      </dt>
+      <dd>
+        <%= time_ago_in_words(@the_security.updated_at) %> ago
+      </dd>
+    </dl>
+  </div>
+</div>
+
+<hr>
+
+
+<div>
+  <div>
+    <h2>
+      Edit security
+    </h2>
+
+    <form action="/modify_security/<%= @the_security.id %>"  method="post" >
+      <div>
+        <label for="company_name_box">
+          Company name
+        </label>
+
+        <input type="text" id="company_name_box" name="query_company_name" value="<%= @the_security.company_name %>">
+      </div>
+
+      <div>
+        <label for="ticker_box">
+          Ticker
+        </label>
+
+        <input type="text" id="ticker_box" name="query_ticker" value="<%= @the_security.ticker %>">
+      </div>
+
+      <div>
+        <label for="average_price_box">
+          Average price
+        </label>
+
+        <input type="text" id="average_price_box" name="query_average_price" value="<%= @the_security.average_price %>">
+      </div>
+
+      <div>
+        <label for="last_price_box">
+          Last price
+        </label>
+
+        <input type="text" id="last_price_box" name="query_last_price" value="<%= @the_security.last_price %>">
+      </div>
+
+      <div>
+        <label for="current_price_box">
+          Current price
+        </label>
+
+        <input type="text" id="current_price_box" name="query_current_price" value="<%= @the_security.current_price %>">
+      </div>
+
+      <div>
+        <label for="owner_id_box">
+          Owner
+        </label>
+
+        <input type="text" id="owner_id_box" name="query_owner_id" value="<%= @the_security.owner_id %>">
+      </div>
+
+      <div>
+        <label for="number_of_shares_box">
+          Number of shares
+        </label>
+
+        <input type="text" id="number_of_shares_box" name="query_number_of_shares" value="<%= @the_security.number_of_shares %>">
+      </div>
+
+      <button>
+        Update security
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>

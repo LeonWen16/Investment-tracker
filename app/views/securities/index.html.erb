@@ -1,0 +1,163 @@
+<hr>
+
+<div> 
+
+</div> 
+
+<body> 
+  <div class="container-fluid"> 
+    <div class="row"> 
+      <div class="col-md-4 text-left"> 
+        <h2 class="mb-2"> 
+          Summary of my portfolio
+        </h2>  
+      
+        <div class="mb-2">
+          <table class="table table-bordered table_font"> 
+            <tbody>
+              <tr> 
+                <th scope="row">Cash</th>
+                <td class="text-right"> <%= @current_user.cash %> </td>
+              </tr> 
+              <tr> 
+                <th scope="row">Total Equity</th>
+                <td class="text-right"> <%= @current_user.cash %></td>
+              </tr> 
+              <tr> 
+                <th scope="row">Gains/Losses</th>
+                <td class="text-right"></td>
+              </tr> 
+            </tbody>
+          </table>
+        </div> 
+      </div>
+
+      <div class="col-md-6 offset-md-2"> 
+        <h2> 
+          Deposit/Withdraw Funds
+        </h2>
+
+        <form action="/funds" method="post">
+          <label for="funds">
+            Amount 
+          </label>
+
+          <input type="float" id="funds" name="query_sum">
+        
+          <button type="funds" name="funds" value="deposit">
+           Deposit
+          </button>
+          <button type="funds" name="funds" value="withdraw">
+            Withdraw
+          </button>
+        </form> 
+      </div>
+    </div> 
+  </div>
+
+</div>
+
+
+<hr> 
+  <div>
+    <div>
+      <h2>
+        Buy or sell a security 
+      </h2>
+
+      <form action="/buy_sell" method="post">
+        <div>
+          <label for="ticker_box">
+            Ticker
+          </label>
+
+          <input type="text" id="ticker_box" name="query_ticker">
+        </div>
+
+        <div>
+          <label for="average_price_box">
+            Price
+          </label>
+
+          <input type="text" id="average_price_box" name="query_price">
+        </div>
+
+        <div>
+          <label for="number_of_shares_box">
+            Number of shares
+          </label>
+
+          <input type="text" id="number_of_shares_box" name="query_number_of_shares">
+        </div>
+
+        <div>
+          <label for="commission_fee">
+            Commission Fees
+          </label>
+
+          <input type="text" id="commission fee" placeholder=0 name="query_commission">
+        </div>
+
+        <button type="buy_sell" class="btn btn-success" name="buy_sell" value="buy">
+          BUY
+        </button>
+        <button type="buy_sell" class="btn btn-danger" name="buy_sell" value="sell">
+          SELL
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+<hr> 
+<div> 
+  <div> 
+    <table>
+      <tr> 
+        <th> 
+          Ticker
+        </th> 
+        <th> 
+          Quantity
+        </th> 
+        <th> 
+          Average Price
+        </th> 
+        <th> 
+          Current Price
+        </th> 
+        <th> 
+          Return ($)
+        </th> 
+        <th> 
+          Return (%)
+        </th> 
+      </tr> 
+
+      <% @list_of_securities.each do |a_security|%>
+      <tr> 
+        <td> 
+          <% a_security.ticker %>
+        <td> 
+        <td> 
+          <% a_security.number_of_shares %>
+        <td> 
+        <td> 
+          <% a_security.average_price %>
+        <td> 
+        <td> 
+          <% a_security.current_price %>
+        <td> 
+        <td> 
+          <% a_security.ticker %>
+        <td> 
+        <td> 
+          <% a_security.ticker %>
+        <td> 
+      </tr> 
+      <% end %>
+    </table>
+  </div>
+</div> 
+<hr>  
+</body> 

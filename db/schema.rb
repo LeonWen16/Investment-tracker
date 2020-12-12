@@ -10,6 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2020_12_12_051405) do
+
+  create_table "securities", force: :cascade do |t|
+    t.string "company_name"
+    t.string "ticker"
+    t.float "average_price"
+    t.float "last_price"
+    t.float "current_price"
+    t.integer "owner_id"
+    t.integer "number_of_shares"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "password_digest"
+    t.string "first_name"
+    t.string "last_name"
+    t.float "current_value"
+    t.float "cash"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.float "base"
+  end
 
 end
